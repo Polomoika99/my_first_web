@@ -1,6 +1,9 @@
-from nturl2path import url2pathname
+from datetime import datetime
+
 import requests
 from bs4 import BeautifulSoup
+
+from webapp.model import db, News
 
 def get_html(url):
     try:
@@ -25,16 +28,38 @@ def get_python_news():
             Вышло: Distinguished Service Award Granted to Naomi Ceder"""
             url = news.find('a')['href'] #К атрибутам обращаемся как к элементам словаря. Вытаскивает ссылку: href="http://pyfound.blogspot.com/2022/07/distinguished-service-award-granted-to.html
             published = news.find('time').text
-            result_news.append({
-                "title": title,
-                "url": url,
-                "published": published
-            })
+            try:
+                published = datetime.strptime(published, "%Y-%m-%d") #Убедились, что в поле published действительно лежит дата.
+            except(ValueError):
+                published = datetime.now()
+            save_news(title, url, published)
+            
+
+def save_news(title, url, published): #Добавим функцию для записи новости в БД
+    news_exists = News.query.filter(News.url == url).count()
+    print(news_exists)
+    if not news_exists:
+        new_news = News(title=title, url = url, published = published) #Создали объект класса News
+        db.session.add(new_news) #Положили объект в сессию Алхимии
+        db.session.commit() #Новость сохранена в БД
+
+
+
+
+
+
+
+
+#result_news.append({
+                #"title": title,
+                #"url": url,
+                #"published": published
+            #})
             #print(title)
             #print(url)
             #print(published)
-        return result_news #result_news - список словарей, который содержит title, url, published
-    return False
+        #return result_news #result_news - список словарей, который содержит title, url, published
+    #return False
 
 #if __name__ == "__main__":
     #html = get_html("https://www.python.org/blogs/") #https://www.python.org/blogs/ - адрес, который собираем

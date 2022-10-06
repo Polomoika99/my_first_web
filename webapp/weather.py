@@ -1,8 +1,8 @@
-from flask import current_app #Образаемся к текущему flask-приложению
+from flask import current_app #Образаемся к текущему flask-приложению для работы app.config.from_pyfile('config.py') из __init__.py
 import requests         #Библиотека requests посылает запрос определенного типа к серверу и возвращает результат.
 
 def weather_by_city(city_name):         #Функция должна принимать название города, для которого запрашиваем погоду
-    weather_url = "current_app.config['WEATHER_URL']"
+    weather_url = current_app.config['WEATHER_URL']
     params = {
         "key" : current_app.config['WEATHER_API_KEY'],
         "q" : city_name,
