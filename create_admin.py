@@ -2,7 +2,8 @@ from getpass import getpass #Что-то типа input, но не выводи�
 import sys #Модуль со взаимодействием с системными функциями, будем исп sys.exit для верного завершение скрипта (без return)
 
 from webapp import create_app
-from webapp.model import User, db
+from webapp.db import db
+from webapp.news.models import User
 
 app = create_app()
 
@@ -10,16 +11,16 @@ app = create_app()
 with app.app_context():
     username = input('Введите имя пользователя: ') # Создаем апликейшен и создаем имя пользователя
 
-    if User.query.filter(User.username == username).count(): #Проверка пользователя с именем
+    if User.query.filter(User.username == username).count(): #Проверка пользователя с именем (что существует)
         print('Пользователь с таким именем существует')
-        sys.exit(0)
+        sys.exit(0) #Выходим из нашей программы
 
     
     password = getpass('Введите пароль')
     password2 = getpass('Повторите пароль')
 
     if not password == password2:
-        print('Пароль не схожи')
+        print('Пароли не схожи')
         sys.exit(0)
 
     new_user = User(username=username, role='admin') # Можно role переделать и запрашивать роль, проверять юзер или админ/ while

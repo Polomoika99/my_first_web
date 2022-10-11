@@ -11,36 +11,10 @@
     <title>{{ page_title }}</title>
   </head>
   <body>
+    {% include 'menu.html' %}
     <div class="container">
-    <h1>{{ page_title }}</h1>
-    <div class="row">
-        <div class="col-7.9">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="alert alert-warning" role="alert">
-                    {% for message in messages %}
-                        {{ message }}<br>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            {% endwith %}
-            <h2>Новости</h2>
-            {% for news in news_list %}
-            <h4><a href="{{ news.url }}">{{ news.title }}</h4>
-            <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
-            <hr />
-            {% endfor %}
-        </div>
-        <div class="col-4.1">
-            <img src="http://skazrus.my1.ru/_ld/7/s36934538.jpg" alt="Тучка-неберучка">
-            <h3>Прогноз погоды в Сочи</h3>
-            {% if weather12 %}
-                Погода: {{ weather12.temp_C }}, ощущается как {{ weather12. FeelsLikeC }}
-            {% else %}
-                Сервис погоды временно недоступен
-            {% endif %}
-        </div>
-    </div>
+        <h1>{{ page_title }}</h1>
+        {% block content %}{% endblock %}
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

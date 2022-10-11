@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template
 from webapp.weather import weather_by_city
-from webapp.model import db, News
+from webapp.db import db, News
 
 def create_app():
     app = Flask(__name__)
