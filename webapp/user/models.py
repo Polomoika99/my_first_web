@@ -1,3 +1,4 @@
+from enum import unique
 from flask_login import UserMixin #Добавим в нашу модель интеграцию с Flask-Login. 
     #Мы можем создать эти поля и метод руками, но можно поступить проще и использовать UserMixin.
 from werkzeug.security import generate_password_hash, check_password_hash #Работа с паролем, шифруем его без воз-ти расшифровки
@@ -9,6 +10,7 @@ class User(db.Model, UserMixin): #Модель пользователя
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
     role = db.Column(db.String(10), index=True) #Роль людей (админ или юзер)
+    email = db.Column(db.String(50))
 
     def set_password(self, password):
         self.password = generate_password_hash(password) #Шифровка пароля ч/з generate_password_hash. В БД идет шифровка.

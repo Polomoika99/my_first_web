@@ -1,7 +1,6 @@
-from flask import Flask, flash, redirect, render_template, url_for #flash - позволяет передавать сообщения между route-ами, 
-    #redirect - делает перенаправление пользователя на другую страницу, 
-    #url_for - помогает получить url по имени функции, которая этот url обрабатывает
+from flask import Flask
 from flask_login import login_required, LoginManager, current_user #login_required - декоратор (Создадим страницу, доступную только зарегистрированным)
+from flask_migrate import Migrate
 
 from webapp.db import db #Привязываем базу (model.py) к нашему Flask-приложению
 from webapp.admin.views import blueprint as admin_blueprint
@@ -13,6 +12,7 @@ def create_app():
     app = Flask(__name__) #Создаем переменную app, в которой будет Flask приложением, куда передаем __name__ имя текущего файла для инициализации.
     app.config.from_pyfile('config.py')
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
