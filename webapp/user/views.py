@@ -1,3 +1,4 @@
+from distutils.log import error
 from flask import Blueprint, flash, redirect, render_template, url_for #flash - позволяет передавать сообщения между route-ами, 
     #redirect - делает перенаправление пользователя на другую страницу, 
     #url_for - помогает получить url по имени функции, которая этот url обрабатывает
@@ -61,5 +62,11 @@ def process_reg():
         db.session.commit()
         flash('Вы успешно зарегистрировались!')
         return redirect(url_for('user.login'))
-    flash('Пожалуйста, исправьте ошибки в форме')
-    return redirect(url_for('user.register'))
+    else:
+        for field, errors in form.errors.items(): #field - название поля (мейл, никнейм), errors - список строк с текстом типа "Пользователь существует"
+            for error in errors:
+                flash('Ошибка в поле "{}": {}'.format(
+                    getattr(form, field).label.text, #getattr - взять аттрибут
+                    error
+                ))
+        return redirect(url_for('user.register'))
